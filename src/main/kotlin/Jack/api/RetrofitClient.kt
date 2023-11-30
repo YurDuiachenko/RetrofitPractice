@@ -6,12 +6,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.*
 
 private const val BASE_TOKEN = ""
 private const val BASE_URL = "https://api.github.com/users/YurDuiachenko/"
 
 object RetrofitClient {
-    
+
     val okHttpClient = OkHttpClient()
         .newBuilder()
         .addInterceptor(RequestInterceptor)
@@ -41,7 +42,7 @@ object AuthorizationInterceptor : Interceptor {
         val requestWithHeader = chain.request()
             .newBuilder()
             .header(
-                "Authorization", BASE_TOKEN
+                "Authorization", UUID.randomUUID().toString()
             ).build()
         return chain.proceed(requestWithHeader)
     }

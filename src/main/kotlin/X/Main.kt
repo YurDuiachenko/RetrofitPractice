@@ -1,20 +1,41 @@
 package X
 
-import X.api.RepoService
-import X.models.Repo
+import X.api.NewService
+import X.models.New
+
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.serializer
 
-fun main(args: Array<String>) {
 
-    var format = Json {
-        prettyPrint = true
-    }
+suspend fun main(){
+    run();
+}
 
-    var repos: List<Repo> = RepoService().successfulRepoResponse()
+suspend fun run() = runBlocking {
+    val service = NewService()
 
-    for(el in repos){
-        println( format.encodeToString(serializer(),  el))
+    var format = Json { prettyPrint = true }
+
+    coroutineScope {
+        launch(Dispatchers.IO) {
+            var repos: List<New> = service.successfulRepoResponse()
+
+            for(el in repos){
+                println(format.encodeToString(serializer(),  el))
+            }
+        }
     }
 }
+
+//fun main() {
+//
+//
+//    var format = Json { prettyPrint = true }
+//    var repoService = RepoService()
+//    var repos: List<Repo> = repoService.successfulRepoResponse()
+//
+//    for(el in repos){
+//        println( format.encodeToString(serializer(),  el))
+//    }
+//}]

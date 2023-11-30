@@ -2,29 +2,27 @@ package X.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import X.errors.ErrorResponse
-import X.models.Repo
-import okhttp3.OkHttpClient
+import X.models.New
 import okhttp3.ResponseBody
 
-class RepoService {
+class NewService {
 
     private val retrofit = RetrofitClient.getClient()
-    private val reposApi = retrofit.create(RepoApi::class.java)
+    private val reposApi = retrofit.create(NewApi::class.java)
 
-    fun successfulRepoResponse(): List<Repo> {
-        val reposResponse = reposApi.getRepos().execute()
+    suspend fun successfulRepoResponse(): List<New> {
+        val reposResponse = reposApi.getRepos()
         println(reposResponse.isSuccessful)
         println(reposResponse.code())
         println(reposResponse.message())
 
-        val body: List<Repo> = reposResponse.body()!!
+        val body: List<New> = reposResponse.body()!!
         return body
     }
 
 
-    fun errorUsersResponse() {
+    suspend fun errorUsersResponse() {
         val usersResponse = reposApi.getRepos()
-            .execute()
 
         val errorBody: ResponseBody? = usersResponse.errorBody()
 
@@ -34,9 +32,8 @@ class RepoService {
         }
     }
 
-    fun headersUsersResponse() {
+    suspend fun headersUsersResponse() {
         val usersResponse = reposApi.getRepos()
-            .execute()
 
         val headers = usersResponse.headers()
         val customHeaderValue = headers["custom-header"]

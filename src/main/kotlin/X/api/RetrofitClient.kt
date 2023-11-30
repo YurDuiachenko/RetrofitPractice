@@ -7,8 +7,11 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
+import java.util.*
 
-private const val BASE_URL = "https://api.github.com/users/YurDuiachenko/"
+
+private const val BASE_URL = "http://localhost:8090"
+//private const val BASE_URL = "https://api.github.com/users/Stanislaviouous/"
 private const val BASE_TOKEN = ""
 
 object RetrofitClient {
@@ -30,7 +33,6 @@ object RetrofitClient {
             .baseUrl(BASE_URL)
             .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
             .build()
-
 }
 
 object RequestInterceptor : Interceptor {
@@ -48,7 +50,7 @@ object AuthorizationInterceptor : Interceptor {
         val requestWithHeader = chain.request()
             .newBuilder()
             .header(
-                "Authorization", BASE_TOKEN
+                "Authorization", UUID.randomUUID().toString()
             ).build()
         return chain.proceed(requestWithHeader)
     }
